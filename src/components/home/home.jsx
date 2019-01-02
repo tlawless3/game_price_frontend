@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SearchBar from '../searchBar/searchBar.jsx';
+import Results from '../results/results';
 
 export default class Home extends Component {
   constructor(props) {
@@ -17,6 +18,13 @@ export default class Home extends Component {
   }
 
   async handleSearch(event, query) {
+    this.setState({
+      steamGameData: {},
+      gogGameData: {},
+      similarTitlesSteam: [],
+      similarTitlesGog: [],
+      searched: false
+    })
     event.preventDefault()
     query.trim()
     const steamAppId = await axios.get(
@@ -59,9 +67,17 @@ export default class Home extends Component {
   }
 
   render() {
+    const SearchResults = (
+      <div className='Results'>
+        <Results platform="steam" gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
+        <Results platform="gog" gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+      </div>
+    )
+
     return (
       <div className="home">
         <SearchBar handleSearch={this.handleSearch} />
+        {this.state.searched ? SearchResults : null}
       </div>
     );
   }
