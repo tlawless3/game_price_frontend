@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
+import './results.css'
 
 const Results = (props) => {
   //if there are multiple games
   if (props.gameData.length > 1) {
     return (
-      <div className='results'>
-        {props.gameData.map(game => (
-          <div key={game.id}>
-            {props.platform}
-            {game.name ? game.name : game.title}
-          </div>
-        ))}
+      <div className='resultsWrapper'>
+        <div className='platformHeader'>
+          {props.platform}
+        </div>
+        <div className='gameList'>
+          {props.gameData.map(game => (
+            <div key={game.id} onClick={() => props.handleTitleClick(props.platform, game)}>
+              {game.name}
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -18,7 +23,8 @@ const Results = (props) => {
   else if (props.gameData[0].name || props.gameData[0].title) {
     return (
       <div className='results'>
-        {props.gameData[0].name ? props.gameData[0].name : props.gameData[0].title}
+        {props.gameData[0].name}
+        {props.gameData[0].price}
       </div>
     )
   }
