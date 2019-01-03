@@ -18,6 +18,7 @@ export default class Home extends Component {
 
     this.handleSearch = this.handleSearch.bind(this)
     this.handleTitleClick = this.handleTitleClick.bind(this)
+    this.handleBackClick = this.handleBackClick.bind(this)
   }
 
   async handleSearch(event, query) {
@@ -85,10 +86,19 @@ export default class Home extends Component {
   async formatSteamData(gameData) {
     let steamData = await axios.get(process.env.REACT_APP_SERVER_URL + `/api/v1.0.0/steamgame/appid/${gameData.appid}`)
     steamData = steamData.data[gameData.appid].data
-    const resultObj = {
-      id: steamData.steam_appid,
-      price: steamData.is_free ? 'Free' : steamData.price_overview.final_formatted + '',
-      name: steamData.name
+    let resultObj
+    if (steamData.steamAppId) {
+      resultObj = {
+        id: steamData.steam_appid,
+        price: steamData.is_free ? 'Free' : steamData.price_overview.final_formatted + '',
+        name: steamData.name
+      }
+    } else {
+      resultObj = {
+        id: 'noId',
+        price: 'Unavailable',
+        name: steamData.name
+      }
     }
     return resultObj
   }
@@ -117,9 +127,23 @@ export default class Home extends Component {
     }
   }
 
+  handleBackClick() {
+    this.setState({
+      steamGameData: {},
+      gogGameData: {},
+      similarTitlesSteam: [],
+      similarTitlesGog: [],
+      money: false,
+      searched: false
+    })
+  }
+
   render() {
     const SearchResults = (
       <div className='resultPageWrapper'>
+        <div className='backArrowSearch' onClick={this.handleBackClick}>
+          Go Back
+        </div>
         <Results platform="steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
         <Results platform="gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
       </div>

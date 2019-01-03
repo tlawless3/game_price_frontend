@@ -6,7 +6,7 @@
 .animatedMoneyWrapper {
   position: absolute;
   left: 100%;
-  animation: flying 2s linear;
+  animation: flying 4s linear;
 }
 
 @keyframes flying {

@@ -22,7 +22,7 @@ const Results = (props) => {
   //if there is only one game
   else if (props.gameData[0].name || props.gameData[0].title) {
     return (
-      <div className='results'>
+      <div className='resultsWrapper'>
         {props.gameData[0].name}
         {props.gameData[0].price}
       </div>
@@ -31,7 +31,7 @@ const Results = (props) => {
   //if the game is not found
   else {
     return (
-      <div className='results'>
+      <div className='resultsWrapper'>
         {`unable to find game on ${props.platform}`}
       </div>
     )
