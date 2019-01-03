@@ -6,9 +6,9 @@ const Results = (props) => {
     return (
       <div className='results'>
         {props.gameData.map(game => (
-          <div key={game.id}>
+          <div key={game.id} onClick={() => props.handleTitleClick(props.platform, game)}>
             {props.platform}
-            {game.name ? game.name : game.title}
+            {game.name}
           </div>
         ))}
       </div>
@@ -18,7 +18,7 @@ const Results = (props) => {
   else if (props.gameData[0].name || props.gameData[0].title) {
     return (
       <div className='results'>
-        {props.gameData[0].name ? props.gameData[0].name : props.gameData[0].title}
+        {props.gameData[0].name}
       </div>
     )
   }

@@ -15,6 +15,7 @@ export default class Home extends Component {
     }
 
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleTitleClick = this.handleTitleClick.bind(this)
   }
 
   async handleSearch(event, query) {
@@ -47,17 +48,17 @@ export default class Home extends Component {
     } else if (steamAppId.data.length === 1) {
       const steamGame = await axios.get(process.env.REACT_APP_SERVER_URL + `/api/v1.0.0/steamgame/appid/${steamAppId.data[0].appid}`)
       this.setState({
-        steamGameData: steamGame.data[steamAppId.data[0].appid].data
+        steamGameData: this.formatSteamData(steamGame.data[steamAppId.data[0].appid].data)
       })
     }
 
     if (gogData.data.products.length > 1) {
       this.setState({
-        similarTitlesGog: gogData.data.products
+        similarTitlesGog: gogData.data.products.map(game => this.formatGogData(game))
       })
     } else if (gogData.data.products.length === 1) {
       this.setState({
-        gogGameData: gogData.data.products[0]
+        gogGameData: this.formatGogData(gogData.data.products[0])
       })
     }
 
@@ -66,16 +67,49 @@ export default class Home extends Component {
     })
   }
 
+  formatSteamData(gameData) {
+    const resultObj = {
+      id: gameData.appid,
+      price: gameData.isFree ? 'Free' : gameData.price_overview.final_formatted + '',
+      name: gameData.name
+    }
+    return resultObj
+  }
+
+  formatGogData(gameData) {
+    const resultObj = {
+      id: gameData.id,
+      price: gameData.price.isFree ? 'Free' : gameData.price.symbol + '' + gameData.price.final_amount,
+      name: gameData.title
+    }
+    return resultObj
+  }
+
+  handleTitleClick(platform, game) {
+    if (platform === 'steam') {
+      this.setState({
+        similarTitlesSteam: [],
+        steamGameData: game
+      })
+    } else if (platform === 'gog') {
+      this.setState({
+        similarTitlesGog: [],
+        gogGameData: game
+      })
+    }
+  }
+
   render() {
     const SearchResults = (
       <div className='Results'>
-        <Results platform="steam" gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
-        <Results platform="gog" gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+        <Results platform="steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
+        <Results platform="gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
       </div>
     )
 
     return (
       <div className="home">
+        {/* <img src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} /> */}
         <SearchBar handleSearch={this.handleSearch} />
         {this.state.searched ? SearchResults : null}
       </div>
