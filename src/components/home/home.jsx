@@ -13,11 +13,13 @@ export default class Home extends Component {
       similarTitlesSteam: [],
       similarTitlesGog: [],
       money: false,
-      searched: false
+      searched: false,
+      animationFin: false
     }
 
     this.handleSearch = this.handleSearch.bind(this)
     this.handleTitleClick = this.handleTitleClick.bind(this)
+    this.handleBackClick = this.handleBackClick.bind(this)
   }
 
   async handleSearch(event, query) {
@@ -33,6 +35,13 @@ export default class Home extends Component {
     query.trim()
     let steamAppId
     let gogData
+
+    setTimeout(() => {
+      this.setState({
+        animationFin: true,
+        money: false,
+      })
+    }, 4000);
 
     try {
       steamAppId = await axios.get(
@@ -85,10 +94,19 @@ export default class Home extends Component {
   async formatSteamData(gameData) {
     let steamData = await axios.get(process.env.REACT_APP_SERVER_URL + `/api/v1.0.0/steamgame/appid/${gameData.appid}`)
     steamData = steamData.data[gameData.appid].data
-    const resultObj = {
-      id: steamData.steam_appid,
-      price: steamData.is_free ? 'Free' : steamData.price_overview.final_formatted + '',
-      name: steamData.name
+    let resultObj
+    if (gameData.appid && steamData) {
+      resultObj = {
+        id: steamData.steam_appid,
+        price: steamData.is_free ? 'Free' : steamData.price_overview.final_formatted + '',
+        name: steamData.name
+      }
+    } else {
+      resultObj = {
+        id: 'noId',
+        price: 'Unavailable',
+        name: gameData.name
+      }
     }
     return resultObj
   }
@@ -103,13 +121,13 @@ export default class Home extends Component {
   }
 
   async handleTitleClick(platform, game) {
-    if (platform === 'steam') {
+    if (platform === 'Steam') {
       const steamData = await this.formatSteamData(game)
       this.setState({
         similarTitlesSteam: [],
         steamGameData: steamData
       })
-    } else if (platform === 'gog') {
+    } else if (platform === 'Gog') {
       this.setState({
         similarTitlesGog: [],
         gogGameData: game
@@ -117,27 +135,43 @@ export default class Home extends Component {
     }
   }
 
+  handleBackClick() {
+    this.setState({
+      steamGameData: {},
+      gogGameData: {},
+      similarTitlesSteam: [],
+      similarTitlesGog: [],
+      money: false,
+      searched: false,
+      animationFin: false
+    })
+  }
+
   render() {
     const SearchResults = (
       <div className='resultPageWrapper'>
-        <Results platform="steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
-        <Results platform="gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+        <div className='backArrowSearch' onClick={this.handleBackClick}>
+          Go Back
+        </div>
+        <div className='resultsPageResults'>
+          <Results platform="Steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
+          <Results platform="Gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+        </div>
       </div>
     )
 
     const searchPage = (
-      <div className='searchPageWrapper'>
-        <div className='title'>
-          Price-O-Matic
-        </div>
-        <div className='searchbar'>
-          <SearchBar handleSearch={this.handleSearch} />
-        </div>
+      <div className='searchbar'>
+        <SearchBar handleSearch={this.handleSearch} />
       </div>
     )
 
     return (
-      <div className="home">
+      <div className='home'>
+        <div className='titleTriangle' />
+        <div className='title'>
+          Game-O-Matic
+        </div>
         <div className={this.state.money ? 'animatedMoneyWrapper' : 'hide'}>
           <img className={this.state.money ? 'animatedMoney' : 'hide'} src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} />
         </div>

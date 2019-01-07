@@ -1,12 +1,15 @@
 .animatedMoney {
-  min-height: 100vh;
+  height: 100vh;
   width: 200vw;
+  min-width: 1000px;
+  z-index: 100;
 }
 
 .animatedMoneyWrapper {
   position: absolute;
   left: 100%;
-  animation: flying 2s linear;
+  animation: flying 4s linear;
+  z-index: 100;
 }
 
 @keyframes flying {
@@ -23,17 +26,91 @@
   display: none;
 }
 
-.searchPageWrapper {
+.searchbar {
   height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
 }
 
-.searchbar {
+.resultsPageWrapper {
+  position: absolute;
+  top: 0;
+  height: 100vh;
+}
+
+.resultsPageResults {
+  position: absolute;
+  top: 0;
   display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+@media screen and (min-width: 605px) {
+  .resultsPageResults {
+    height: 100vh;
+  }
+}
+
+.titleTriangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-top: 100px solid #3399ff;
+  border-right: 270px solid transparent;
+  z-index: 200;
+}
+
+.title {
+  margin-top: 30px;
+  position: absolute;
+  font-size: 25px;
+  font-weight: 700;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  /* Safari */
+  -webkit-transform: rotate(-21deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-21deg);
+
+  /* IE */
+  -ms-transform: rotate(-21deg);
+
+  /* Opera */
+  -o-transform: rotate(-21deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+
+@media screen and (max-width: 600px) {
+  .resultsPageResults>div:first-child {
+    margin-top: 75px;
+  }
+
+  .resultsPageResults {
+    margin-bottom: 100px;
+  }
+}
+
+.backArrowSearch {
+  cursor: pointer;
+  position: fixed;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 25px;
+  bottom: 35px;
+  margin-bottom: 5px;
+  z-index: 99;
+  left: calc(50% - 43.5px)
 }
