@@ -6,15 +6,17 @@ const Results = (props) => {
   if (props.gameData.length > 1) {
     return (
       <div className='resultsWrapper'>
-        <div className='platformHeader'>
-          {props.platform}
-        </div>
-        <div className='gameList'>
-          {props.gameData.map(game => (
-            <div key={game.id} onClick={() => props.handleTitleClick(props.platform, game)}>
-              {game.name}
-            </div>
-          ))}
+        <div className='resultsBox'>
+          <div className='platformHeader'>
+            {props.platform}
+          </div>
+          <div className='gameList'>
+            {props.gameData.map(game => (
+              <div key={game.id} className='gameInfo list' onClick={() => props.handleTitleClick(props.platform, game)}>
+                {game.name}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -23,8 +25,23 @@ const Results = (props) => {
   else if (props.gameData[0].name || props.gameData[0].title) {
     return (
       <div className='resultsWrapper'>
-        {props.gameData[0].name}
-        {props.gameData[0].price}
+        <div className='resultsBox singleGame'>
+          <div className='platformHeader'>
+            {props.platform}
+          </div>
+          <div className='gameList'>
+            {props.gameData.map(game => (
+              <div key={game.id} className='gameInfo'>
+                <div>
+                  {game.name}
+                </div>
+                <div>
+                  {game.price}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   }
@@ -32,7 +49,9 @@ const Results = (props) => {
   else {
     return (
       <div className='resultsWrapper'>
-        {`unable to find game on ${props.platform}`}
+        <div className='resultsBox'>
+          {`unable to find game on ${props.platform}`}
+        </div>
       </div>
     )
   }

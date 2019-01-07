@@ -13,7 +13,8 @@ export default class Home extends Component {
       similarTitlesSteam: [],
       similarTitlesGog: [],
       money: false,
-      searched: false
+      searched: false,
+      animationFin: false
     }
 
     this.handleSearch = this.handleSearch.bind(this)
@@ -34,6 +35,13 @@ export default class Home extends Component {
     query.trim()
     let steamAppId
     let gogData
+
+    setTimeout(() => {
+      this.setState({
+        animationFin: true,
+        money: false,
+      })
+    }, 4000);
 
     try {
       steamAppId = await axios.get(
@@ -87,7 +95,7 @@ export default class Home extends Component {
     let steamData = await axios.get(process.env.REACT_APP_SERVER_URL + `/api/v1.0.0/steamgame/appid/${gameData.appid}`)
     steamData = steamData.data[gameData.appid].data
     let resultObj
-    if (steamData.steamAppId) {
+    if (gameData.appid && steamData) {
       resultObj = {
         id: steamData.steam_appid,
         price: steamData.is_free ? 'Free' : steamData.price_overview.final_formatted + '',
@@ -97,7 +105,7 @@ export default class Home extends Component {
       resultObj = {
         id: 'noId',
         price: 'Unavailable',
-        name: steamData.name
+        name: gameData.name
       }
     }
     return resultObj
@@ -134,8 +142,10 @@ export default class Home extends Component {
       similarTitlesSteam: [],
       similarTitlesGog: [],
       money: false,
-      searched: false
+      searched: false,
+      animationFin: false
     })
+    console.log('click')
   }
 
   render() {
@@ -144,16 +154,15 @@ export default class Home extends Component {
         <div className='backArrowSearch' onClick={this.handleBackClick}>
           Go Back
         </div>
-        <Results platform="steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
-        <Results platform="gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+        <div className='resultsPageResults'>
+          <Results platform="Steam" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesSteam.length > 1 ? this.state.similarTitlesSteam : [this.state.steamGameData]} />
+          <Results platform="Gog" handleTitleClick={this.handleTitleClick} gameData={this.state.similarTitlesGog.length > 1 ? this.state.similarTitlesGog : [this.state.gogGameData]} />
+        </div>
       </div>
     )
 
     const searchPage = (
       <div className='searchPageWrapper'>
-        <div className='title'>
-          Price-O-Matic
-        </div>
         <div className='searchbar'>
           <SearchBar handleSearch={this.handleSearch} />
         </div>
@@ -161,10 +170,19 @@ export default class Home extends Component {
     )
 
     return (
-      <div className="home">
+      <div className='home'>
+        <div className='titleTriangle' />
+        <div className='title'>
+          Price-O-Matic
+        </div>
         <div className={this.state.money ? 'animatedMoneyWrapper' : 'hide'}>
           <img className={this.state.money ? 'animatedMoney' : 'hide'} src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} />
         </div>
+        {this.state.searched && this.state.animationFin ?
+          <div className='moneyBackgroundWrapper'>
+            <img className='animatedMoneyBackground' src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} />
+          </div>
+          : null}
         {this.state.searched ? SearchResults : searchPage}
       </div>
     );

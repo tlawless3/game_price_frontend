@@ -1,5 +1,31 @@
 .resultsWrapper {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100vh;
+  align-content: center;
+  justify-content: center;
+}
+
+.resultsBox {
+  height: 400px;
+  overflow: scroll;
+  width: 300px;
+  background-color: #3399ff;
+  z-index: 1;
+}
+
+.resultsBox.singleGame {
+  height: 200px;
+}
+
+.gameInfo {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.gameInfo.list {
+  cursor: pointer;
 }
