@@ -121,13 +121,13 @@ export default class Home extends Component {
   }
 
   async handleTitleClick(platform, game) {
-    if (platform === 'steam') {
+    if (platform === 'Steam') {
       const steamData = await this.formatSteamData(game)
       this.setState({
         similarTitlesSteam: [],
         steamGameData: steamData
       })
-    } else if (platform === 'gog') {
+    } else if (platform === 'Gog') {
       this.setState({
         similarTitlesGog: [],
         gogGameData: game
@@ -145,7 +145,6 @@ export default class Home extends Component {
       searched: false,
       animationFin: false
     })
-    console.log('click')
   }
 
   render() {
@@ -162,10 +161,8 @@ export default class Home extends Component {
     )
 
     const searchPage = (
-      <div className='searchPageWrapper'>
-        <div className='searchbar'>
-          <SearchBar handleSearch={this.handleSearch} />
-        </div>
+      <div className='searchbar'>
+        <SearchBar handleSearch={this.handleSearch} />
       </div>
     )
 
@@ -173,16 +170,11 @@ export default class Home extends Component {
       <div className='home'>
         <div className='titleTriangle' />
         <div className='title'>
-          Price-O-Matic
+          Game-O-Matic
         </div>
         <div className={this.state.money ? 'animatedMoneyWrapper' : 'hide'}>
           <img className={this.state.money ? 'animatedMoney' : 'hide'} src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} />
         </div>
-        {this.state.searched && this.state.animationFin ?
-          <div className='moneyBackgroundWrapper'>
-            <img className='animatedMoneyBackground' src={`${process.env.REACT_APP_SERVER_URL}/money.jpg`} />
-          </div>
-          : null}
         {this.state.searched ? SearchResults : searchPage}
       </div>
     );

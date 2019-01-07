@@ -1,8 +1,8 @@
 .resultsWrapper {
   display: flex;
   flex-direction: column;
+  overflow: scroll;
   flex-wrap: wrap;
-  height: 100vh;
   align-content: center;
   justify-content: center;
 }
@@ -11,6 +11,7 @@
   height: 400px;
   overflow: scroll;
   width: 300px;
+  margin-top: 30px;
   background-color: #3399ff;
   z-index: 1;
 }
@@ -28,4 +29,21 @@
 
 .gameInfo.list {
   cursor: pointer;
+}
+
+.gameInfo.final {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 100px;
+}
+
+.platformHeader {
+  border-bottom: solid black 1px;
+  margin: auto;
+  margin-bottom: 10px;
+  width: 80%;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px;
 }

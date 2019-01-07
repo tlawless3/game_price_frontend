@@ -31,11 +31,11 @@ const Results = (props) => {
           </div>
           <div className='gameList'>
             {props.gameData.map(game => (
-              <div key={game.id} className='gameInfo'>
-                <div>
-                  {game.name}
+              <div key={game.id} className='gameInfo final'>
+                <div className='gameName'>
+                  {game.name + ' :'}
                 </div>
-                <div>
+                <div className='gamePrice'>
                   {game.price}
                 </div>
               </div>
@@ -49,7 +49,7 @@ const Results = (props) => {
   else {
     return (
       <div className='resultsWrapper'>
-        <div className='resultsBox'>
+        <div className='resultsBox singleGame'>
           {`unable to find game on ${props.platform}`}
         </div>
       </div>
