@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import runtimeEnv from '@mars/heroku-js-runtime-env';
 import axios from 'axios';
 import SearchBar from '../searchBar/searchBar.jsx';
 import Results from '../results/results';
