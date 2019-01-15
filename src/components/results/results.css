@@ -1,7 +1,6 @@
 .resultsWrapper {
   display: flex;
   flex-direction: column;
-  overflow: scroll;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
@@ -9,7 +8,7 @@
 
 .resultsBox {
   height: 400px;
-  overflow: scroll;
+  overflow-y: scroll;
   width: 300px;
   margin-top: 30px;
   background-color: #3399ff;
